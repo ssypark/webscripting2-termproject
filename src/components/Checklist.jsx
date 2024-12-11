@@ -5,12 +5,12 @@ import { faCheckSquare as solidCheck } from "@fortawesome/free-solid-svg-icons";
 
 function Checklist() {
   const [savedBirds, setSavedBirds] = useState(() => {
-    // Load checklist data from localStorage
+    // Load checklist data from localStorage if it is available. Otherwise, set it to an empty array
     const savedChecklist = localStorage.getItem("checklist");
     return savedChecklist ? JSON.parse(savedChecklist) : [];
   });
 
-  useEffect(() => {
+  useEffect(() => { // See Homepage for the logic on how this works
     fetch("https://api.ebird.org/v2/data/obs/geo/recent?lat=49.2827&lng=-123.1207", {
       headers: {
         "X-eBirdApiToken": "ur002gd6aek9",
@@ -22,18 +22,19 @@ function Checklist() {
         const filteredChecklist = sightingsArray.filter((bird) =>
           savedBirds.includes(bird.speciesCode)
         );
-        setSavedBirds(filteredChecklist);
+        setSavedBirds(filteredChecklist); // Updates the state with the filtered checklist
       })
       .catch((error) => {
+        // This catches and logs any errors that occur
         console.error("Error fetching bird sightings:", error);
       });
   }, []);
-
+// This function removes a bird from the checklist
   const removeFromChecklist = (birdID) => {
     // Remove bird from checklist
     const updatedChecklist = savedBirds.filter((bird) => bird.speciesCode !== birdID);
-    setSavedBirds(updatedChecklist);
-    // Update checklist in localStorage
+    setSavedBirds(updatedChecklist); // this updates the state with the new checklist
+    // we can then update checklist in localStorage
     localStorage.setItem("checklist", JSON.stringify(updatedChecklist.map((bird) => bird.speciesCode)));
   };
 
@@ -70,7 +71,8 @@ function Checklist() {
                       state={bird}
                       className="text-roof-600 hover:underline"
                     >
-                      {bird.comName}
+                        {/* The comName prop is used to display the common name of the bird */}
+                      {bird.comName} 
                     </Link>
                   </td>
                   <td className="border border-roof-400 px-4 py-2 text-right">
@@ -86,7 +88,8 @@ function Checklist() {
             </tbody>
           </table>
         ) : (
-          <p className="text-roof-300 text-center">Your checklist is currently empty.</p>
+            // If the checklist is empty, this message is displayed
+          <p className="text-roof-300 text-center">Tweet Tweet! Your checklist is currently empty! Fly over Home page to add sightings to your checklist.</p>
         )}
       </div>
 
