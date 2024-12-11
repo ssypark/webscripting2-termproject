@@ -1,6 +1,4 @@
 # **Birding Buddy - Web Scripting 2 Term Project**
-## Author
-
 **Name:** Samuel Park   
 **Student Number:** A00943561
 **Program:** BCIT - New Media Design & Web Development  
@@ -57,7 +55,7 @@
 
 2. Navigate to the project directory
     ```bash
-    cd-webscripting2-termproject
+    cd webscripting2-termproject
 
 3. Install dependencies:
     ```bash
