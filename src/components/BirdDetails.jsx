@@ -112,7 +112,7 @@ function BirdDetails() {
                             <p className="italic text-gray-600">{bird.sciName}</p>
                         </div>
                         <div className="flex items-center gap-2">
-                            <p className="text-roof-800 font-semibold text-lg font-medium">Seen:</p>
+                            <p className="text-roof-800 font-semibold text-lg">Seen:</p>
                             <button
                                 className="text-2xl text-roof-400 hover:text-roof-700"
                                 onClick={toggleChecklist}
