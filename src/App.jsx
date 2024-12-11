@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home.jsx";
 import BirdDetails from "./components/BirdDetails.jsx";
-import Favourites from "./components/Favourites.jsx";
+import Checklist from "./components/Checklist.jsx";
 
 function App() {
  
@@ -11,7 +11,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/bird/:id" element={<BirdDetails />} />
-      <Route path="/favourites" element={<Favourites />} />
+      <Route path="/checklist" element={<Checklist />} />
     </Routes>
     </BrowserRouter>
    

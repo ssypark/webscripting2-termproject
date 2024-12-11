@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckSquare as solidCheck } from "@fortawesome/free-solid-svg-icons";
+import { faSquare as regularCheck } from "@fortawesome/free-regular-svg-icons";
+
 
 function Home() {
     const [sightings, setSightings] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [favs, setFavs] = useState(() => {
-        const savedFavs = localStorage.getItem("favs");
-        return savedFavs ? JSON.parse(savedFavs) : [];
+    const [checklist, setChecklist] = useState(() => {
+        const savedChecklist = localStorage.getItem("checklist");
+        return savedChecklist ? JSON.parse(savedChecklist) : [];
     });
     const [birdOfTheDay, setBirdOfTheDay] = useState(null);
     const [birdImage, setBirdImage] = useState("");
@@ -26,17 +30,17 @@ function Home() {
             });
     };
 
-    const toggleFav = (birdID) => {
-        let filteredFavs;
+    const toggleChecklist = (birdID) => {
+        let updatedChecklist;
 
-        if (favs.includes(birdID)) {
-            filteredFavs = favs.filter((favId) => favId !== birdID);
+        if (checklist.includes(birdID)) {
+            updatedChecklist = checklist.filter((id) => id !== birdID);
         } else {
-            filteredFavs = [...favs, birdID];
+            updatedChecklist = [...checklist, birdID];
         }
 
-        localStorage.setItem("favs", JSON.stringify(filteredFavs));
-        setFavs(filteredFavs);
+        localStorage.setItem("checklist", JSON.stringify(updatedChecklist));
+        setChecklist(updatedChecklist);
     };
 
     useEffect(() => {
@@ -69,78 +73,97 @@ function Home() {
     }, []);
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold text-center mb-6">Browse Birds</h1>
+        <div className="bg-roof-50 min-h-screen">
+  <div className="container mx-auto p-4">
+    <div className="flex justify-between items-center mb-6">
 
-            {birdOfTheDay && (
-                <div className="bg-white rounded-lg shadow-lg p-4 mb-6">
-                    <h2 className="text-xl font-semibold text-center text-red-600">Bird of the Day</h2>
-                    <img
-                        src={birdImage}
-                        alt={`Image of ${birdOfTheDay.comName}`}
-                        className="mx-auto w-full max-w-xs rounded-lg shadow-md mt-4"
-                    />
-                    <div className="flex items-center justify-between mt-4">
-                        <h3 className="text-lg font-medium">{birdOfTheDay.comName}</h3>
-                        <Link
-                            to={`/bird/${birdOfTheDay.speciesCode}`}
-                            state={birdOfTheDay}
-                            className="text-sm font-semibold text-red-600 hover:text-red-800"
-                        >
-                            Learn More
-                        </Link>
-                    </div>
-                </div>
-            )}
+      {/* Title */}
+      <h1 className="text-3xl font-bold text-roof-900">Birding Buddy</h1>
+      
+      {/* My Checklist Button */}
+      <Link
+        to="/checklist"
+        className="bg-roof-400 text-roof-50 px-4 py-2 rounded-lg shadow-md hover:bg-roof-500"
+      >
+        My Checklist
+      </Link>
+    </div>
 
-            <div className="flex items-center mb-4">
-                <input
-                    type="text"
-                    placeholder="Search for a bird"
-                    value={searchTerm}
-                    onChange={(event) => setSearchTerm(event.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-red-300"
-                />
-                <button
-                    onClick={searchBirds}
-                    className="ml-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:ring focus:ring-red-300"
-                >
-                    Search
-                </button>
-            </div>
-
-            <table className="table-auto w-full border-collapse border border-gray-200">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th className="border border-gray-200 px-4 py-2 text-left">Bird Name</th>
-                        <th className="border border-gray-200 px-4 py-2 text-right">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sightings.map((bird) => (
-                        <tr key={bird.speciesCode} className="hover:bg-gray-50">
-                            <td className="border border-gray-200 px-4 py-2">
-                                <Link to={`/bird/${bird.speciesCode}`} state={bird} className="text-blue-600 hover:underline">
-                                    {bird.comName}
-                                </Link>
-                            </td>
-                            <td className="border border-gray-200 px-4 py-2 text-right">
-                                <button
-                                    onClick={() => toggleFav(bird.speciesCode)}
-                                    className={`px-2 py-1 text-sm rounded-lg ${
-                                        favs.includes(bird.speciesCode)
-                                            ? "bg-green-600 text-white hover:bg-green-700"
-                                            : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                                    }`}
-                                >
-                                    {favs.includes(bird.speciesCode) ? "Remove Fav" : "Add Fav"}
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+    {/* Bird of the Day */}
+    {birdOfTheDay && (
+      <div className="bg-roof-100 max-w-md mx-auto rounded-lg shadow-lg p-4 mb-6">
+        <h2 className="text-xl font-semibold text-center text-roof-900">Bird of the Day</h2>
+        <img
+          src={birdImage}
+          alt={`Image of ${birdOfTheDay.comName}`}
+          className="mx-auto w-full max-w-xs rounded-lg shadow-md mt-4"
+        />
+        <div className="flex items-center justify-between mt-4">
+          <h3 className="text-lg font-medium text-roof-900">{birdOfTheDay.comName}</h3>
+          <Link
+            to={`/bird/${birdOfTheDay.speciesCode}`}
+            state={birdOfTheDay}
+            className="text-sm font-semibold text-roof-600 hover:underline"
+          >
+            Learn More
+          </Link>
         </div>
+      </div>
+    )}
+
+    {/* Search Bar */}
+    <div className="flex items-center mb-4">
+      <input
+        type="text"
+        placeholder="Search for a bird"
+        value={searchTerm}
+        onChange={(event) => setSearchTerm(event.target.value)}
+        className="w-full px-4 py-2 border border-roof-400 rounded-lg focus:outline-none focus:ring focus:ring-roof-300"
+      />
+      <button
+        onClick={searchBirds}
+        className="ml-2 px-4 py-2 bg-roof-400 text-roof-50 rounded-lg hover:bg-roof-500 focus:ring focus:ring-roof-300"
+      >
+        Search
+      </button>
+    </div>
+
+    {/* Table of Birds */}
+    <table className="table-auto w-full border-collapse border border-roof-400">
+      <thead>
+        <tr className="bg-roof-200">
+          <th className="border border-roof-400 px-4 py-2 text-left text-roof-900">Bird Name</th>
+          <th className="border border-roof-400 px-4 py-2 text-right text-roof-900">Checklist</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sightings.map((bird) => (
+          <tr key={bird.speciesCode} className="hover:bg-roof-100">
+            <td className="border border-roof-400 px-4 py-2">
+              <Link
+                to={`/bird/${bird.speciesCode}`}
+                state={bird}
+                className="text-roof-600 hover:underline"
+              >
+                {bird.comName}
+              </Link>
+            </td>
+            <td className="border border-roof-400 px-4 py-2 text-right">
+              <button
+                onClick={() => toggleChecklist(bird.speciesCode)}
+                className="text-2xl text-roof-400 hover:text-roof-700"
+              >
+                <FontAwesomeIcon
+                  icon={checklist.includes(bird.speciesCode) ? solidCheck : regularCheck}
+                />
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
     );
 }
 
