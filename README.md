@@ -51,7 +51,7 @@
 ### **Steps to Run**
 1. Clone the repository:
     ```bash
-    git clone <repository-link>
+    git clone https://github.com/ssypark/webscripting2-termproject.git
 
 2. Navigate to the project directory
     ```bash
